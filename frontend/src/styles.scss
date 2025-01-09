@@ -1,0 +1,62 @@
+body {
+  // font-family: 'sans-serif';
+  background-color: #f7fafc;
+  margin: 0;
+.dashboard {
+  // display: flex;
+  flex-direction: column;
+  height: 100vh; /* Use Tailwind utilities for the dashboard layout */
+
+  .main-content {
+    display: flex;
+    flex: 1;
+    overflow: hidden; /* Main content layout */
+
+    .left-panel {
+      flex: 2;
+      border-right: 1px solid #d1d5db;
+      overflow: auto;
+      padding: 1rem;
+      background-color: #ffffff; /* Tailwind replacement for left panel */
+    }
+
+    .middle-panel {
+      flex: 3;
+      border-right: 1px solid #d1d5db;
+      overflow: auto;
+      padding: 1rem;
+      background-color: #ffffff; /* Tailwind replacement for middle panel */
+    }
+
+    .right-panel {
+      flex: 1;
+      background-color: #ffffff;
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start; /* Tailwind replacement for right panel */
+
+      button {
+        width: 100%;
+        margin-bottom: 0.75rem;
+        padding: 0.5rem 0.75rem;
+        background-color: #2563eb;
+        color: #ffffff;
+        border-radius: 0.5rem;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+        transition: all 0.2s; /* Tailwind styles for buttons */
+
+        &:hover {
+          background-color: #3b82f6; /* Hover effect */
+        }
+
+        &:active {
+          background-color: #1d4ed8; /* Active state */
+        }
+      }
+    }
+  }
+}
+    }
+  
