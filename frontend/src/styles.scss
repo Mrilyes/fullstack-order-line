@@ -1,62 +1,76 @@
 body {
-  // font-family: 'sans-serif';
-  background-color: #f7fafc;
+  font-family: Arial, sans-serif;
   margin: 0;
+  padding: 0;
+  background-color: #f4f4f9;
+}
+
+// .navbar {
+//   background-color: #007bff;
+//   color: white;
+//   padding: 1rem;
+//   text-align: center;
+//   font-size: 1.5rem;
+  // font-weight: bold;
+// }
+
 .dashboard {
   // display: flex;
   flex-direction: column;
-  height: 100vh; /* Use Tailwind utilities for the dashboard layout */
+  height: 100vh;
 
   .main-content {
     display: flex;
     flex: 1;
-    overflow: hidden; /* Main content layout */
+    overflow: hidden;
 
     .left-panel {
       flex: 2;
-      border-right: 1px solid #d1d5db;
+      border-right: 1px solid #ccc;
       overflow: auto;
       padding: 1rem;
-      background-color: #ffffff; /* Tailwind replacement for left panel */
+      background-color: #ffff;
     }
 
     .middle-panel {
       flex: 3;
-      border-right: 1px solid #d1d5db;
-      overflow: auto;
       padding: 1rem;
-      background-color: #ffffff; /* Tailwind replacement for middle panel */
+      overflow: auto;
+      background-color: #ffff;
+      border-right: 1px solid #ccc;
     }
 
     .right-panel {
       flex: 1;
-      background-color: #ffffff;
-      padding: 1rem;
+      background-color: #ffff;
+      padding: 0.5rem;
       display: flex;
       flex-direction: column;
       align-items: center;
-      justify-content: flex-start; /* Tailwind replacement for right panel */
+      justify-content: flex-start;
 
-      button {
-        width: 100%;
-        margin-bottom: 0.75rem;
-        padding: 0.5rem 0.75rem;
-        background-color: #2563eb;
-        color: #ffffff;
-        border-radius: 0.5rem;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
-        transition: all 0.2s; /* Tailwind styles for buttons */
+      // button {
+      //   // width: 100%;
+        // margin: 0.5rem 0;
+        // padding: 0.7rem 1rem;
+      //   // background-color: #007bff;
+      //   // color: white;
+      //   // border: none;
+      //   // border-radius: 5px;
+      //   // cursor: pointer;
+      //   // font-size: 1rem;
+      //   // font-weight: bold;
+      //   // text-align: center;
+      //   // box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+      // }
 
-        &:hover {
-          background-color: #3b82f6; /* Hover effect */
-        }
+      // button:hover {
+      //   background-color: #0056b3;
+      // }
 
-        &:active {
-          background-color: #1d4ed8; /* Active state */
-        }
-      }
+      // button:active {
+      //   background-color: #004085;
+      // }
     }
   }
 }
-    }
-  

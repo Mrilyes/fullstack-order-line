@@ -9,7 +9,7 @@ h-16: Sets the height to 4rem (64px), which is close to 65px.
 shadow-md: Applies a medium box-shadow. -->
   <!-- py-2 px-4 sm:py-4 sm:px-6: Increases vertical and horizontal padding on sm and larger screens. -->
   <nav
-    class="flex justify-between items-center py-2 px-4 sm:py-4 sm:px-6 bg-navbar-bg text-white h-16 shadow-md"
+    class="flex justify-between items-center py-2 px-4 sm:py-4 sm:px-6 bg-navbar-bg text-white h-14 shadow-md"
   >
     <!-- Left Section: Burger Button and Logo -->
 

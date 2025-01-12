@@ -1,14 +1,14 @@
 <template>
   <div
     v-if="props.visible"
-    class="fixed inset-0 bg-black bg-opacity-60 backdrop-blur-md flex items-center justify-center z-50 transition-opacity duration-300"
+    class="fixed inset-0 bg-black bg-opacity-70 backdrop-blur-sm flex items-center justify-center z-50 transition-opacity duration-300"
   >
     <div
-      class="relative bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white p-8 md:p-12 rounded-2xl shadow-2xl transform scale-95 hover:scale-100 transition-transform duration-300 max-w-xl w-full"
+      class="relative bg-gradient-to-br from-blue-700 via-blue-600 to-blue-500 text-white p-8 md:p-12 rounded-3xl shadow-2xl transform scale-95 hover:scale-105 transition-transform duration-500 max-w-lg w-full"
     >
       <!-- Close Button -->
       <button
-        @click="onClose"
+        @click="onLeave"
         class="absolute top-4 right-4 text-white text-opacity-80 hover:text-opacity-100 transition-all"
       >
         <i class="fa-solid fa-times text-2xl"></i>
@@ -26,8 +26,7 @@
 
       <!-- Modal Body -->
       <p class="text-center text-lg text-white text-opacity-90 leading-relaxed">
-        Are you sure you want to leave without saving your changes? Your unsaved work will
-        be lost!
+        Your unsaved work will be lost!
       </p>
 
       <!-- Modal Actions -->

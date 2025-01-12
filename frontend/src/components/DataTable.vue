@@ -347,19 +347,19 @@ watch(
 );
 
 // Debugging: Log changes to currentPage
-watch(currentPage, (newPage) => {
-  console.log(`Current page updated to: ${newPage}`);
-});
+// watch(currentPage, (newPage) => {
+//   console.log(`Current page updated to: ${newPage}`);
+// });
 
-// Debugging: Log changes to sortField
-watch(sortField, (newField) => {
-  console.log(`Sort field changed to: ${newField}`);
-});
+// // Debugging: Log changes to sortField
+// watch(sortField, (newField) => {
+//   console.log(`Sort field changed to: ${newField}`);
+// });
 
-// Debugging: Log changes to sortOrder
-watch(sortOrder, (newOrder) => {
-  console.log(`Sort order changed to: ${newOrder}`);
-});
+// // Debugging: Log changes to sortOrder
+// watch(sortOrder, (newOrder) => {
+//   console.log(`Sort order changed to: ${newOrder}`);
+// });
 
 // Watch for changes to filters and debounce the update logic
 // Debounce Function: Delays the execution of the filter logic until the user has stopped typing for a specified duration (300ms in this case), reducing the number of times the filter is applied.

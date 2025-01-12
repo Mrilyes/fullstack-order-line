@@ -1,7 +1,7 @@
 <template>
   <div
     v-if="visible"
-    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-md transition-opacity duration-300"
+    class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-70 backdrop-blur-sm transition-opacity duration-300"
     @click.self="closeModal"
   >
     <!-- Modal Content -->
@@ -9,15 +9,15 @@
       class="relative bg-gradient-to-br from-gray-900 via-gray-800 to-gray-700 text-white rounded-3xl shadow-2xl w-full max-w-4xl max-h-[85%] overflow-y-auto p-8 transform transition-transform duration-500 scale-95 hover:scale-100"
     >
       <!-- Header -->
-      <div class="flex justify-between items-center mb-6 border-b border-gray-600 pb-4">
-        <h3 class="text-3xl font-semibold">{{ props.title || "Product Selection" }}</h3>
-        <button
-          @click="closeModal"
-          class="text-gray-400 hover:text-gray-300 transition-all text-2xl"
-        >
-          <i class="fa-solid fa-times"></i>
-        </button>
-      </div>
+      <!-- <div class="flex justify-between items-center mb-6 border-b border-gray-600 pb-4"> -->
+      <!-- <h3 class="text-3xl font-semibold">{{ props.title || "Product Selection" }}</h3> -->
+      <button
+        @click="closeModal"
+        class="absolute top-4 right-4 mb-3 text-gray-300 hover:text-gray-400 transition-all"
+      >
+        <i class="fa-solid fa-times text-2xl"></i>
+      </button>
+      <!-- </div> -->
 
       <!-- Table -->
       <table class="w-full text-sm md:text-base border-separate border-spacing-y-3">

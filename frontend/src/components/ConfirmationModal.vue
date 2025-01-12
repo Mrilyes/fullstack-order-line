@@ -5,14 +5,14 @@
   >
     <!-- Modal Container -->
     <div
-      class="relative bg-gradient-to-br from-red-600 via-red-500 to-red-400 text-white rounded-3xl w-11/12 max-w-lg mx-auto p-8 shadow-2xl transform transition-transform duration-500 hover:scale-105"
+      class="relative bg-gradient-to-br from-red-600 via-red-500 to-red-400 text-white rounded-3xl w-11/12 max-w-lg mx-auto md:p-12 p-8 shadow-2xl transform transition-transform duration-500 hover:scale-105"
     >
       <!-- Close Button -->
       <button
         @click="hideModal"
         class="absolute top-4 right-4 text-white text-opacity-80 hover:text-opacity-100 transition duration-200"
       >
-        <i class="fa-solid fa-times text-3xl"></i>
+        <i class="fa-solid fa-times text-2xl"></i>
       </button>
 
       <!-- Modal Header -->
@@ -40,7 +40,7 @@
         </button>
         <button
           @click="hideModal"
-          class="bg-gray-300 hover:bg-gray-400 text-gray-800 text-lg px-6 py-3 rounded-full shadow-md font-medium transition-all focus:ring focus:ring-gray-400"
+          class="bg-gray-500 hover:bg-gray-400 text-white text-lg px-6 py-3 rounded-full shadow-md font-medium transition-all focus:ring focus:ring-gray-400"
         >
           Cancel
         </button>
