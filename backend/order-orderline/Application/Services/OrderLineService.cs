@@ -39,6 +39,12 @@ namespace order_orderline.Application.Services
 
         public async Task<OrderLineDto> AddOrderLineAsync(OrderLineDto orderLineDto)
         {
+            // Check for null input
+            if (orderLineDto == null)
+            {
+                throw new ArgumentNullException(nameof(orderLineDto), "OrderLineDto cannot be null.");
+            }
+
             var orderLine = _mapper.Map<OrderLine>(orderLineDto);
 
             // Add the entity to the repository
@@ -50,16 +56,17 @@ namespace order_orderline.Application.Services
 
         public async Task UpdateOrderLineAsync(int id, OrderLineDto orderLineDto)
         {
-            if (id != orderLineDto.OrderLineId)
+            // Check for null input
+            if (orderLineDto == null)
             {
-                throw new InvalidOperationException("OrderLineId mismatch between path and data.");
+                throw new ArgumentNullException(nameof(orderLineDto), "OrderLineDto cannot be null.");
             }
 
             // Fetch the existing order line from the repository
             var existingOrderLine = await _repository.GetByIdAsync(id);
             if (existingOrderLine == null)
             {
-                throw new InvalidOperationException("OrderLine not found.");
+                throw new Exception("OrderLine not found");
             }
 
             // Ensure no changes are attempted on immutable properties
