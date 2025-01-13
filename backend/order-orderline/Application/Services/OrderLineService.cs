@@ -19,6 +19,9 @@ namespace order_orderline.Application.Services
         public async Task<IEnumerable<OrderLineDto>> GetAllOrderLinesAsync()
         {
             var orderLines = await _repository.GetAllAsync();
+            if(orderLines == null) {
+                return null;
+            }
             return _mapper.Map<IEnumerable<OrderLineDto>>(orderLines);
         }
 
