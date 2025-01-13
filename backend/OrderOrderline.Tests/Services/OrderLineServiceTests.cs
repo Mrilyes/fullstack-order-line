@@ -279,5 +279,308 @@ namespace OrderOrderline.Tests.Services
             mockMapper.Verify(mapper => mapper.Map<OrderLineDto>(It.IsAny<OrderLine>()), Times.Never);
         }
 
+        // ---> AddOrderAsync Tests <---
+        //Scenarios to Test
+        //Happy Path: The order is successfully created.
+        //Null Input: The input OrderDto is null.
+        //Exception Handling: The repository throws an exception.
+
+        // Scenario: The order is successfully created.
+        [Fact]
+        public async Task AddOrderLineAsync_ShouldCreateOrderLine()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Set up mock data
+            var orderLineDto = new OrderLineDto
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+            var orderLine = new OrderLine
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+
+            // Configure mock mapper to return the mapped entity
+            mockMapper.Setup(mapper => mapper.Map<OrderLine>(orderLineDto)).Returns(orderLine);
+            //mockMapper.Setup(mapper => mapper.Map<OrderLineDto>(orderLine)).Returns(orderLineDto);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act
+            await service.AddOrderLineAsync(orderLineDto);
+
+            // Assert
+            mockRepo.Verify(repo => repo.CreateAsync(orderLine), Times.Once);
+            mockMapper.Verify(mapper => mapper.Map<OrderLine>(orderLineDto), Times.Once);
+        }
+
+        // Scenario: The input OrderDto is null.
+        [Fact]
+        public async Task AddOrderLineAsync_ShouldThrowExceptionWhenOrderLineDtoIsNull()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<ArgumentNullException>(() => service.AddOrderLineAsync(null));
+
+            // Verify the repository and mapper were never called
+            mockRepo.Verify(repo => repo.CreateAsync(It.IsAny<OrderLine>()), Times.Never);
+            mockMapper.Verify(mapper => mapper.Map<OrderLine>(It.IsAny<OrderLineDto>()), Times.Never);
+        }
+
+        [Fact]
+        public async Task AddOrderLineAsync_ShouldHandleRepositoryException()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Set up mock data
+            var orderLineDto = new OrderLineDto
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            }; 
+            var orderLine = new OrderLine
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            }; 
+
+            // Configure mock mapper to return the mapped entity
+            mockMapper.Setup(mapper => mapper.Map<OrderLine>(orderLineDto)).Returns(orderLine);
+
+            // Configure mock repository to throw an exception
+            mockRepo.Setup(repo => repo.CreateAsync(orderLine)).ThrowsAsync(new Exception("Database error"));
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object , mockMapper.Object);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => service.AddOrderLineAsync(orderLineDto));
+            mockRepo.Verify(repo => repo.CreateAsync(orderLine), Times.Once);
+            mockMapper.Verify(mapper => mapper.Map<OrderLine>(orderLineDto), Times.Once);
+        }
+
+        // ---> UpdateOrderLineAsync Tests <---
+
+        //Happy Path: The orderLine is successfully updated.
+        //Order Not Found: The repository returns null (orderLine not found).
+        //Null Input: The input orderLineDto is null.
+        //Exception Handling: The repository throws an exception.
+
+        //  Scenario: The orderLine is successfully updated.
+        [Fact]
+        public async Task UpdateOrderAsync_ShouldUpdateOrder()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Set up mock data
+            var existingOrderLine = new OrderLine
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+
+            var orderLineDto = new OrderLineDto
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+
+            // Configure mock repository to return the existing order
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(existingOrderLine);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act
+            await service.UpdateOrderLineAsync(1, orderLineDto);
+
+            // Assert
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockRepo.Verify(repo => repo.UpdateAsync(existingOrderLine), Times.Once);
+        }
+
+        // Scenario: The repository returns null (order not found).
+        [Fact]
+        public async Task UpdateOrderLineAsync_ShouldThrowExceptionWhenOrderNotFound()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Configure mock repository to return null
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync((OrderLine)null);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<Exception>(() => service.UpdateOrderLineAsync(1, new OrderLineDto()));
+            //var exception = await Assert.ThrowsAsync<InvalidOperationException>(() => service.UpdateOrderLineAsync(1, new OrderLineDto()));
+
+            // Verify the exception message
+            Assert.Equal("OrderLine not found", exception.Message);
+
+            // Verify the repository and mapper were never called
+            mockRepo.Verify(repo => repo.UpdateAsync(It.IsAny<OrderLine>()), Times.Never);
+            mockMapper.Verify(mapper => mapper.Map(It.IsAny<OrderLineDto>(), It.IsAny<OrderLine>()), Times.Never);
+        }
+
+        // Scenario: The input OrderLineDto is null.
+        [Fact]
+        public async Task UpdateOrderLineAsync_ShouldThrowExceptionWhenOrderDtoIsNull()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act & Assert
+            var exception = await Assert.ThrowsAsync<ArgumentNullException>(() => service.UpdateOrderLineAsync(1, null));
+
+            // Verify the exception message
+            Assert.Contains("OrderLineDto cannot be null.", exception.Message);
+
+            // Verify the repository and mapper were never called
+            mockRepo.Verify(repo => repo.UpdateAsync(It.IsAny<OrderLine>()), Times.Never);
+            mockMapper.Verify(mapper => mapper.Map(It.IsAny<OrderLineDto>(), It.IsAny<OrderLine>()), Times.Never);
+
+        }
+
+        // ---> DeleteOrderLineAsync Tests <---
+        //Happy Path: The orderLine is successfully deleted.
+        //Order Not Found: The repository returns null (order not found).
+        //Exception Handling: The repository throws an exception.
+
+        // Scenario: The order is successfully deleted.
+        [Fact]
+        public async Task DeleteOrderAsync_ShouldDeleteOrder()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+
+            // Set up mock data
+            var orderLine = new OrderLine
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+
+            // Configure mock repository to return the existing order
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(orderLine);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, null);
+
+            // Act
+            var result = await service.DeleteOrderLineAsync(1);
+
+            // Assert
+            Assert.True(result);
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockRepo.Verify(repo => repo.DeleteAsync(orderLine), Times.Once);
+        }
+
+        // Scenario: The repository returns null (order not found).
+        [Fact]
+        public async Task DeleteOrderLineAsync_ShouldReturnFalseWhenOrderNotFound()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+
+            // Configure mock repository to return null
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync((OrderLine)null);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, null);
+
+            // Act
+            var result = await service.DeleteOrderLineAsync(1);
+
+            // Assert
+            Assert.False(result);
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockRepo.Verify(repo => repo.DeleteAsync(It.IsAny<OrderLine>()), Times.Never);
+        }
+
+        // Scenario: The repository throws an exception.
+        [Fact]
+        public async Task DeleteOrderLineAsync_ShouldHandleRepositoryException()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+
+            // Set up mock data
+            var orderLine = new OrderLine {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+
+            // Configure mock repository to return the existing order
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(orderLine);
+
+            // Configure mock repository to throw an exception
+            mockRepo.Setup(repo => repo.DeleteAsync(orderLine)).ThrowsAsync(new Exception("Database error"));
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, null);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => service.DeleteOrderLineAsync(1));
+
+            // Verify the repository was called
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockRepo.Verify(repo => repo.DeleteAsync(orderLine), Times.Once);
+        }
+
     }
 }
