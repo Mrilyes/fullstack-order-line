@@ -1,0 +1,56 @@
+# workflow name : This is the name of the workflow. It will appear in the GitHub Actions tab in your repository.
+name: Backend CI
+#Trigger Conditions: 
+  #Push: The workflow will run when you push code to the develop branch.
+  #Pull Request: The workflow will run when a pull request is created or updated targeting the develop branch.
+on:
+  push:
+    branches: [ develop ]
+  pull_request:
+    branches: [ develop ]
+
+# Jobs:
+#Jobs: A workflow can have multiple jobs. Here, we define one job named build.
+#runs-on: Specifies the type of machine to run the job on. ubuntu-latest is a GitHub-hosted runner with the latest Ubuntu version.
+jobs:
+  build:
+    runs-on: ubuntu-latest
+#Steps are the individual tasks that make up the job. Let’s break them down:
+#What It Does: This step checks out your repository code so the workflow can access it.
+#uses: It uses the actions/checkout@v3 action, which is a pre-built GitHub Action for checking out code.
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+
+# Setup .NET : this step sets up the .NET SDK on the runner.
+#uses: It uses the actions/setup-dotnet@v3 action to install the .NET SDK.
+#with: Specifies the .NET version to install. Since your project uses .NET 8.0, we specify 8.0.x.
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '8.0.x'
+
+#  Restore Dependencies
+#  This step restores the NuGet packages for your .NET project.
+# run: Executes the dotnet restore command, which downloads all dependencies listed in your .csproj file (e.g., AutoMapper, Microsoft.EntityFrameworkCore).
+# ./backend/order-orderline.sln: Specifies the path to your solution file.
+      - name: Restore dependencies
+        run: dotnet restore ./backend/order-orderline.sln
+
+# This step builds your .NET project.
+# run: Executes the dotnet build command, which compiles your code.
+# --no-restore: Skips the restore step because we already restored dependencies in the previous step.
+
+      - name: Build
+        run: dotnet build ./backend/order-orderline.sln --no-restore
+
+# This step runs the unit tests in your .NET project.
+# run: Executes the dotnet test command, which runs all tests in your solution.
+# --no-build: Skips the build step because we already built the project in the previous step.
+# --verbosity normal: Sets the verbosity level of the test output to normal.
+      - name: Run tests
+        run: dotnet test ./backend/order-orderline.sln --no-build --verbosity normal
+
+        
