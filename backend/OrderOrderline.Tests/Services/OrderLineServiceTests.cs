@@ -181,6 +181,103 @@ namespace OrderOrderline.Tests.Services
         }
 
 
+        // ---> GetOrdeLinerByIdAsync Tests <---
+        //Scenarios to Test
+        //Happy Path: Returns an OrderLineDto for a valid order line ID.   
+        //Null Response: Handles null when the order is not found.
+        //Exception Handling: Handles exceptions thrown by the repository.
+
+        // Scenario: The repository returns a valid Order.
+        [Fact]
+        public async Task GetOrderLineByIdAsync_ShouldReturnOrderLineDto()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Set up mock data
+            var orderLine = new OrderLine
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+            var orderLineDto = new OrderLineDto
+            {
+                OrderLineId = 1,
+                OrderId = 101,
+                ArticleId = 201,
+                ProductName = "Product A",
+                Quantity = 2,
+                Price = 10.0m
+            };
+
+            // Configure mock repository to return the test data
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync(orderLine);
+
+            // Configure mock mapper to return the mapped DTO
+            mockMapper.Setup(mapper => mapper.Map<OrderLineDto>(orderLine)).Returns(orderLineDto);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act
+            var result = await service.GetOrderLineByIdAsync(1);
+
+            // Assert
+            Assert.NotNull(result);
+            Assert.Equal("Product A", result.ProductName);
+            Assert.Equal(2, result.Quantity);
+            Assert.Equal(10.0m, result.Price);
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockMapper.Verify(mapper => mapper.Map<OrderLineDto>(orderLine), Times.Once);
+        }
+
+        // Scenario: The repository returns null (order not found).
+        [Fact]
+        public async Task GetOrderLineByIdAsync_ShouldHandleNullResponse()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Configure mock repository to return null
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ReturnsAsync((OrderLine)null);
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object, mockMapper.Object);
+
+            // Act
+            var result = await service.GetOrderLineByIdAsync(1);
+
+            // Assert
+            Assert.Null(result);
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockMapper.Verify(mapper => mapper.Map<OrderLineDto>(It.IsAny<OrderLine>()), Times.Never);
+        }
+
+        // Scenario: The repository throws an exception.
+        [Fact]
+        public async Task GetOrderLineByIdAsync_ShouldHandleRepositoryException()
+        {
+            // Arrange
+            var mockRepo = new Mock<IOrderLineRepository>();
+            var mockMapper = new Mock<IMapper>();
+
+            // Configure mock repository to throw an exception
+            mockRepo.Setup(repo => repo.GetByIdAsync(1)).ThrowsAsync(new Exception("Database error"));
+
+            // Create an instance of the service with the mocked dependencies
+            var service = new OrderLineService(mockRepo.Object , mockMapper.Object);
+
+            // Act & Assert
+            await Assert.ThrowsAsync<Exception>(() => service.GetOrderLineByIdAsync(1));
+            mockRepo.Verify(repo => repo.GetByIdAsync(1), Times.Once);
+            mockMapper.Verify(mapper => mapper.Map<OrderLineDto>(It.IsAny<OrderLine>()), Times.Never);
+        }
 
     }
 }
