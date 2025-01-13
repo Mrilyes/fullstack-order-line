@@ -43,9 +43,9 @@
                   @click="openModal(index)"
                   class="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring focus:ring-blue-300"
                 />
-                <button
+                <i
                   class="fa-solid fa-search absolute right-3 top-1/2 transform -translate-y-1/2 text-blue-900 cursor-pointer"
-                ></button>
+                ></i>
               </div>
             </td>
             <!-- Quantity Column -->

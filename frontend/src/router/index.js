@@ -2,13 +2,12 @@ import { createRouter, createWebHistory } from 'vue-router'
 
 import ArticleDashboardLayout from '@/views/ArticleDashboardLayout.vue'
 import OrderDashboardLayout from '@/views/OrderDashboardLayout.vue'
-import CustomerDashboardLayout from '@/views/CustomerDashboardLayout.vue'
 
 const routes = [
   {
     path: '/',
     name: 'home',
-    component: ArticleDashboardLayout, // Load the DashboardLayout component
+    component: OrderDashboardLayout, // Load the DashboardLayout component
   },
   {
     path: '/articledashboard',
@@ -19,13 +18,6 @@ const routes = [
     path: '/orderdashboard',
     name: 'orderdashboard',
     component: OrderDashboardLayout, // Load the DashboardLayout component
-  },
-
-
-  {
-    path: '/customerDashboard',
-    name: 'customerDashboard',
-    component: CustomerDashboardLayout, // Load the DashboardLayout component
   },
   {
     path: '/homePage',

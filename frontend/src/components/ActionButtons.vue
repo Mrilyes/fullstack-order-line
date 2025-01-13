@@ -63,8 +63,7 @@
       :disabled="button.disabled"
       @click="emit('button-clicked', button.action)"
       :class="[
-        'flex items-center justify-center !bg-[#003f7f] !text-white !border-[#003f7f] gap-0.1 px-2 py-0.5 rounded-md font-medium text-sm transition-colors',
-        'sm:px-2 sm:py-1 sm:text-xs', // Responsive adjustments for smaller screens
+        'flex items-center justify-center bg-[#003f7f] text-white border-[#003f7f] gap-0.1 px-3 py-0.6 rounded-md font-medium text-sm transition-colors m-1.5 mb-1 md:px-3 md:py-2 md:text-xs', // Responsive adjustments for smaller screens
         'md:px-3 md:py-1.5 md:text-sm', // Responsive adjustments for medium screens
         'lg:px-4 lg:py-2 lg:text-base', // Responsive adjustments for larger screens
         button.disabled
