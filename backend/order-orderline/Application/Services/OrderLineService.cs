@@ -28,6 +28,12 @@ namespace order_orderline.Application.Services
         public async Task<OrderLineDto> GetOrderLineByIdAsync(int id)
         {
             var orderLine = await _repository.GetByIdAsync(id);
+
+            if (orderLine == null)
+            {
+                return null;
+            }
+
             return _mapper.Map<OrderLineDto>(orderLine);
         }
 
