@@ -36,6 +36,7 @@ jobs:
         working-directory: ./frontend  # Run commands in the frontend folder
 
 
+
       # Step 5: Build the project
       - name: Build project
         run: npm run build
