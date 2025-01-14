@@ -22,6 +22,7 @@
                 :selectedItem="selectedRow"
                 :orderLines="orderLines"
                 :isCreateMode="isCreating"
+                :isAddButtonDisable="isAddButtonDisable"
                 @create="handleCreate"
                 @update="handleUpdate"
                 @deleted-order-lines="handleDeletedOrderLines"
@@ -71,6 +72,7 @@ const showWarningModal = ref(false);
 const hasUnsavedChanges = ref(false);
 const pendingSelectedRow = ref(null);
 const deletedOrderLines = ref([]);
+const isAddButtonDisable = ref(false);
 
 // Template refs
 const orderLeftPanel = ref(null);
@@ -98,6 +100,7 @@ const onRowSelected = (order) => {
     selectedRow.value = { ...order };
     isCreating.value = false;
     orderLines.value = order.orderLines || [];
+    isAddButtonDisable.value = true;
     // toast.info("Order selected.");
   }
 };
@@ -110,6 +113,7 @@ const startCreating = () => {
     selectedRow.value = null;
     orderLines.value = [];
     isCreating.value = true;
+    isAddButtonDisable.value = true;
     // toast.info("Switched to create mode.");
   }
 };
@@ -135,21 +139,6 @@ const handleLeave = () => {
   }
 };
 
-// try {
-//     const url = `https://localhost:7128/api/OrderLine/${orderLineId}`;
-//     await apiServices.delete(url);
-//     localOrderLines.splice(index, 1);
-//     hasUnsavedChanges.value = false;
-//     originalOrderLines.splice(
-//       0,
-//       originalOrderLines.length,
-//       ...JSON.parse(JSON.stringify(localOrderLines))
-//     );
-//     emit("unsaved-changes", false);
-//   } catch (error) {
-//     console.error("Error deleting order line:", error);
-//   }
-
 const preprocessOrder = (order) => {
   return {
     ...order,
@@ -166,12 +155,6 @@ const preprocessOrder = (order) => {
 const handleCreate = async (newOrder) => {
   const processedOrder = preprocessOrder(newOrder);
   try {
-    // Log the payload
-    // console.log("Payload for Create:", {
-    //   ...processedOrder,
-    //   deletedOrderLines: deletedOrderLines.value, // Use the stored deleted lines
-    // });
-
     // Create the new order
     await apiServices.post(orderApiUrl.value, processedOrder);
 
@@ -188,12 +171,6 @@ const handleUpdate = async (updatedOrder) => {
   const processedOrder = preprocessOrder(updatedOrder);
   const updateUrl = `${orderApiUrl.value}/${processedOrder.orderId}`;
   try {
-    // Log the payload
-    // console.log("Payload for Update:", {
-    //   ...processedOrder,
-    //   deletedOrderLines: deletedOrderLines.value, // Use the stored deleted lines
-    // });
-
     // Update the order
     await apiServices.put(updateUrl, processedOrder);
 
@@ -207,7 +184,6 @@ const handleUpdate = async (updatedOrder) => {
 };
 
 const handleDeletedOrderLines = (deletedLines) => {
-  // console.log("Deleted Order Lines in Dashboard Layout:", deletedLines);
   // Store the deleted lines for later use
   deletedOrderLines.value = deletedLines;
 };
