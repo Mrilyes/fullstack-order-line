@@ -1,0 +1,37 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ develop ]  # Trigger on push to the main branch
+  pull_request:
+    branches: [ develop ]  # Trigger on pull requests to the main branch
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Use Node.js 18 (or the version your project uses)
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend  # Run commands in the frontend folder
+
+      # Step 4: Run linting
+      - name: Run linting
+        run: npm run lint
+        working-directory: ./frontend
+
+      # Step 5: Build the project
+      - name: Build project
+        run: npm run build
+        working-directory: ./frontend
