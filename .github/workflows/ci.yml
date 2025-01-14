@@ -6,8 +6,12 @@ name: Backend CI
 on:
   push:
     branches: [ develop ]
+    paths:
+      - 'backend/**'  # Only trigger if changes are in the backend directory
   pull_request:
     branches: [ develop ]
+    paths:
+      - 'backend/**'  # Only trigger if changes are in the backend directory
 
 # Jobs:
 #Jobs: A workflow can have multiple jobs. Here, we define one job named build.
