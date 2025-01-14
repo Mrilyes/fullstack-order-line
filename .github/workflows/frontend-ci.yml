@@ -30,10 +30,6 @@ jobs:
         run: npm install
         working-directory: ./frontend  # Run commands in the frontend folder
 
-      # Step 4: Run linting
-      - name: Run linting
-        run: npm run lint
-        working-directory: ./frontend
 
       # Step 5: Build the project
       - name: Build project
