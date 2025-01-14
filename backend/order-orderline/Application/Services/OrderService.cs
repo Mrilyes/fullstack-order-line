@@ -22,9 +22,16 @@ namespace order_orderline.Application.Services
             _context = context;
         }
 
-        public async Task<List<OrderDto>> GetAllOrdersAsync()
+        public async Task<List<OrderDto>?> GetAllOrdersAsync()
         {
             var orders = await _repository.GetAllAsync();
+
+            // Handle null case
+            if (orders == null)
+            {
+                return null;
+            }
+
             return _mapper.Map<List<OrderDto>>(orders);
         }
 
@@ -36,6 +43,12 @@ namespace order_orderline.Application.Services
 
         public async Task AddOrderAsync( OrderDto orderDto)
         {
+            // Validate input
+            if (orderDto == null)
+            {
+                throw new ArgumentNullException(nameof(orderDto), "OrderDto cannot be null.");
+            }
+
             var order = _mapper.Map<Order>(orderDto);
             order.OrderNumber = $"ORD-{DateTime.Now:yyyyMMddHHmmss}";
 
@@ -44,16 +57,31 @@ namespace order_orderline.Application.Services
 
         public async Task UpdateOrderAsync(int id, OrderDto orderDto)
         {
+            // Validate input
+            if (orderDto == null)
+            {
+                throw new ArgumentNullException(nameof(orderDto), "OrderDto cannot be null.");
+            }
+
             var existingOrder = await _repository.GetByIdAsync(id);
 
             if (existingOrder == null) throw new Exception("Order not found");
+
 
             // Update simple properties
             existingOrder.CustomerName = orderDto.CustomerName;
             existingOrder.OrderDate = orderDto.OrderDate;
 
+            // Initialize OrderLines if null
+            //If existingOrder.OrderLines is null, initialize it to an empty list.
+            if (existingOrder.OrderLines == null)
+            {
+                existingOrder.OrderLines = new List<OrderLine>();
+            }
+
             // Update OrderLines
-            var updatedOrderLines = orderDto.OrderLines;
+            // If orderDto.OrderLines is null, initialize updatedOrderLines to an empty list.
+            var updatedOrderLines = orderDto.OrderLines ?? new List<OrderLineDto>();
 
             // Remove order lines that are no longer present
             var linesToRemove = existingOrder.OrderLines
@@ -98,8 +126,6 @@ namespace order_orderline.Application.Services
 
             await _repository.UpdateAsync(existingOrder);
         }
-
-
 
         public async Task<bool> DeleteOrderAsync(int id)
         {

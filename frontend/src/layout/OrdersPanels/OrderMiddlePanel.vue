@@ -60,6 +60,7 @@
       <OrderLinesTable
         :orderLines="localOrderLines"
         :orderId="localForm.orderId"
+        :isAddButtonDisable="isAddButtonDisable"
         @update-order-lines="updateOrderLines"
         @deleted-order-lines="handleDeletedOrderLines"
         @open-modal="openModalForProduct"
@@ -96,6 +97,10 @@ const props = defineProps({
   orderLines: {
     type: Array,
     default: () => [],
+  },
+  isAddButtonDisable: {
+    type: Boolean,
+    default: false,
   },
 });
 // Emits
@@ -161,12 +166,6 @@ const openModalForProduct = (rowIndex) => {
   isModalVisible.value = true;
   fetchArticles();
 };
-
-// const handleUnsavedChanges = (hasChanges) => {
-//   console.log("Unsaved changes from lines table:", hasChanges);
-//   hasUnsavedChanges.value = hasChanges;
-//   emit("unsaved-changes", hasChanges);
-// };
 
 const detectUnsavedChanges = () => {
   // console.log("Unsaved changes detected in middle panel.");

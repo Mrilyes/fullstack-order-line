@@ -3,7 +3,8 @@
     <!-- Add Row Button -->
     <button
       @click="addRow"
-      class="bg-gradient-to-r mb-2 mt-6 bg-blue-900 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-blue-400 transition-colors"
+      :disabled="!isAddButtonDisable"
+      class="bg-gradient-to-r mb-2 mt-6 bg-blue-900 text-white px-4 py-2 rounded-full hover:from-blue-700 hover:to-blue-400 transition-colors disabled:cursor-not-allowed disabled:opacity-50"
     >
       <i class="fa-solid fa-plus"></i>
     </button>
@@ -136,6 +137,10 @@ const props = defineProps({
   orderLines: {
     type: Array,
     default: () => [],
+  },
+  isAddButtonDisable: {
+    type: Boolean,
+    default: false,
   },
 });
 
@@ -329,7 +334,6 @@ const handleArticleSelect = (article) => {
 
     emit("update-order-lines", [...localOrderLines]);
     localOrderLines.splice(selectedRowIndex.value, 1, { ...selectedRow });
-    // console.log("handleArticleSelect  -> selectedRow", selectedRow);
   }
   closeModal();
 };
@@ -379,17 +383,3 @@ onBeforeUnmount(() => {
   window.removeEventListener("beforeunload", beforeUnloadHandler);
 });
 </script>
-
-// w-full border-collapse: Full-width responsive table with collapsed borders. // Header
-rows: bg-blue-900 text-white p-2 text-center for consistent alignment and spacing. // Body
-rows: border-t border-gray-300 for row separation. // Input Fields: // w-full p-2 border
-border-gray-300 rounded: Full-width inputs with padding, borders, and rounded corners. //
-focus:outline-none focus:ring focus:ring-blue-300: Adds focus effects. // Search Icon in
-Input: // relative container and absolute icon positioning with right-2 top-1/2 transform
--translate-y-1/2 for perfect centering. // Add Row Button: // mb-2 mt-6 bg-blue-900
-text-white px-4 py-2 rounded hover:bg-blue-700: Styled button with hover effect and margin
-adjustments. // Action Button: // bg-red-600 text-white px-3 py-1 rounded
-hover:bg-red-500: Red delete button with hover effects. // Responsiveness: // Tailwind
-classes (like w-full, flex, and p-2) ensure the layout adjusts seamlessly across all
-devices. // Table adapts to smaller screens, and the inputs remain accessible and
-user-friendly.

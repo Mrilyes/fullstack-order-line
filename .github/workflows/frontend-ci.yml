@@ -1,0 +1,58 @@
+name: Frontend CI
+
+on:
+  push:
+    branches: [ develop ]  # Trigger on push to the main branch
+    paths:
+      - 'frontend/**'  # Only trigger if changes are in the frontend directory
+  pull_request:
+    branches: [ develop ]  # Trigger on pull requests to the main branch
+    paths:
+      - 'frontend/**'  # Only trigger if changes are in the frontend directory
+
+jobs:
+  build-and-lint:
+    runs-on: ubuntu-latest  # Use the latest Ubuntu environment
+
+    steps:
+      # Step 1: Check out the code
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      # Step 2: Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Use Node.js 18 (or the version your project uses)
+
+      # Step 3: Install dependencies
+      - name: Install dependencies
+        run: npm install
+        working-directory: ./frontend  # Run commands in the frontend folder
+
+      # Step 4: Run linting
+      - name: Run linting
+        run: npm run lint
+        working-directory: ./frontend
+
+      # Step 5: Build the project
+      - name: Build project
+        run: npm run build
+        working-directory: ./frontend
+
+      # Step 6: Start the app in the background
+      - name: Start the app
+        run: npm run dev &
+        working-directory: ./frontend
+
+      # Step 7: Wait for the app to start
+      - name: Wait for the app to start
+        run: sleep 10 # Wait for 10 seconds (adjust as needed)
+
+      # Step 8: Run Cypress tests
+      - name: Run Cypress tests
+        run: npm run test:e2e
+        working-directory: ./frontend
+        env:
+          CYPRESS_BASE_URL: http://localhost:5173 # Replace with your app's URL
+

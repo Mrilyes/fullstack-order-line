@@ -19,8 +19,6 @@ const routes = [
     name: 'orderdashboard',
     component: OrderDashboardLayout, // Load the DashboardLayout component
   },
-
-
   {
     path: '/homePage',
     name: 'HomePage',
